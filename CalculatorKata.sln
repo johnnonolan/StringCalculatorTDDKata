@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorKata", "CalculatorKata\CalculatorKata.csproj", "{818776FB-CD82-467A-9B7A-33CBB5429924}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorKata.Tests", "CalculatorKata.Tests\CalculatorKata.Tests.csproj", "{A8555472-2587-4578-BAC3-82BA2F39D75D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{818776FB-CD82-467A-9B7A-33CBB5429924}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{818776FB-CD82-467A-9B7A-33CBB5429924}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{818776FB-CD82-467A-9B7A-33CBB5429924}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{818776FB-CD82-467A-9B7A-33CBB5429924}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8555472-2587-4578-BAC3-82BA2F39D75D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8555472-2587-4578-BAC3-82BA2F39D75D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8555472-2587-4578-BAC3-82BA2F39D75D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8555472-2587-4578-BAC3-82BA2F39D75D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
