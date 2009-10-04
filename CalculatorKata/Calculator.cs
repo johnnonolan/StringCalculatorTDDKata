@@ -7,6 +7,7 @@ namespace CalculatorKata
 {
     public class Calculator
     {
+        //lets pu a comment in here just to test    
         private char _delimiter = ',';
         public decimal Add(string input)
         {
