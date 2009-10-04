@@ -10,67 +10,73 @@ namespace CalculatorKata.Tests
     public class CalculatorTest
     {
         [Test]
-        public void Add_EmptyString_ReturnsZero()
+        public void Add_OneNumber_ReturnNumber()
         {
-            //Arrange
+            //arrange
+            var numbers = "0";
+            //act 
             var calc = new Calculator();
-            //Act
-            var result= calc.Add("");
-            //Assert
-            Assert.AreEqual(0, result);
-        }
-        [Test]
-        public void Add_Number_ReturnsNumber()
-        {
-            
-            //Arrange
-            var input = 4.01m;             
-            //Act
-            var calc = new Calculator();
-            var result = calc.Add(input);
-            //Assert
-            Assert.AreEqual(input, result);
+            var result = calc.Add(numbers);
+            //assert
+            Assert.That(result==0,"One number returned incorrectly");
         }
 
-        //Takes 2 numbers separated by delimeter (',') and returns sum
         [Test]
-        public void Add_2NumbersSeperatedByCommaDelimiter_ReturnsSum()
+        public void Add_TwoNumbers_ReturnNumber()
         {
-            //Arrange
-            var input = "3,2";
-            //Act
+            //arrange
+            var numbers = "1,2";
+            //act 
             var calc = new Calculator();
-            var result = calc.Add(input);
-            //Assert
-            Assert.AreEqual(5, result);            
+            var result = calc.Add(numbers);
+            //assert
+            Assert.That(result == 3, "2 numbers summed returned incorrectly");
+        }
+
+        [Test]
+        public void Add_ThreeNumbers_ReturnNumber()
+        {
+            //arrange
+            var numbers = "1,2,1";
+            //act 
+            var calc = new Calculator();
+            var result = calc.Add(numbers);
+            //assert
+            Assert.That(result == 4, "3 numbers summed returned incorrectly");
         }
         
-  
         [Test]
-        public void Add_MulitpleNumbers_ReturnSum()
+        public void Add_EmpyString_Return_Zero()
         {
-            //Arrange
-            var input = "3,2,8.5";
-            //Act
+            //arrange
+            var numbers = "";
+            //act 
             var calc = new Calculator();
-            var result = calc.Add(input);
-            //Assert
-            Assert.AreEqual(3+2+8.5, result);            
-
+            var result = calc.Add(numbers);
+            //assert
+            Assert.That(result == 0, "Zero string returned incorrectly");
         }
 
         [Test]
-        public void Add_When_ChangeDelimiter()
+        public void Add_IntMaxAndOne_ExpectError()
         {
-            var input = "3,2,8.5";
-            //Act
+            //arrange
+            var thrown = false;
+            var numbers = "2147483647,1";
+            //act 
             var calc = new Calculator();
-            var result1 = calc.Add(input);
-            calc.ChangeDelimiter('/');
-            var input2 = "3/2/8.5";
-            var result2 = calc.Add(input2);
-            Assert.AreEqual(result1,result2);
+            try
+            {
+                var result = calc.Add(numbers);
+            }
+            catch
+            {
+                thrown = true;
+            }
+            //assert
+            Assert.IsTrue(thrown, "Exception should be thrown");
         }
-
     }
+
+
 }

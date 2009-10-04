@@ -7,36 +7,37 @@ namespace CalculatorKata
 {
     public class Calculator
     {
-        //lets pu a comment in here just to test    
         private char _delimiter = ',';
-        public decimal Add(string input)
+        public int Add(string numbers)
         {
-            if (input == String.Empty)
+            int sum ;
+            if (!numbers.Contains(_delimiter))
             {
-                return 0;
+                Int32.TryParse(numbers, out sum);
+                return sum;
             }
             else
             {
-                decimal total = 0.00M;
-                var inputs =input.Split(_delimiter);
-                foreach (string s in inputs)
-                {
-                    Decimal decimalInput;
-                    Decimal.TryParse(s, out decimalInput);
-                    total += decimalInput;
-                }
-                return total;                                   
+                return SplitStringAndAdd(numbers);
             }
+
         }
 
-        public decimal Add(decimal input)
+        private int SplitStringAndAdd(string numbers)
         {
-            return input;
-        }
-
-        public void ChangeDelimiter(char delimimeter)
-        {
-            _delimiter = delimimeter;
+            const uint MAXplus1 = 2147483648;
+            var nums= numbers.Split(_delimiter);
+            int total = 0;
+            foreach (var num in nums)
+            {
+                int addition;
+                if (num != (MAXplus1).ToString())
+                    throw new Exception();
+                int.TryParse(num, out addition);
+                
+                total += addition;
+            }
+            return total;
         }
     }
 }
