@@ -7,37 +7,36 @@ namespace CalculatorKata
 {
     public class Calculator
     {
-        private char _delimiter = ',';
-        public int Add(string numbers)
+        private const char _delimiter = ',';
+
+        public Calculator()
         {
-            int sum ;
-            if (!numbers.Contains(_delimiter))
-            {
-                Int32.TryParse(numbers, out sum);
-                return sum;
-            }
-            else
-            {
-                return SplitStringAndAdd(numbers);
-            }
 
         }
-
-        private int SplitStringAndAdd(string numbers)
+        public int Add(string numbers)
         {
-            const uint MAXplus1 = 2147483648;
-            var nums= numbers.Split(_delimiter);
-            int total = 0;
-            foreach (var num in nums)
+            if (numbers.Contains(_delimiter))
             {
-                int addition;
-                if (num != (MAXplus1).ToString())
-                    throw new Exception();
-                int.TryParse(num, out addition);
-                
-                total += addition;
-            }
-            return total;
+                var result = 0;
+                var numbersCollection = numbers.Split(_delimiter);
+                foreach (var number in numbersCollection)
+                {
+                    result += ParseNumber(number);
+                }
+                return result;
+            } 
+
+            return ParseNumber(numbers);
+        }
+
+        private static int ParseNumber(string numbers)
+        {
+            const int DEFAULTVALUE = 0;
+            int returnInt = 0;
+            Int32.TryParse(numbers, out returnInt);
+
+
+            return String.IsNullOrEmpty(numbers) ? DEFAULTVALUE : returnInt;
         }
     }
 }

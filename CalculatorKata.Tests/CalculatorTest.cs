@@ -10,72 +10,64 @@ namespace CalculatorKata.Tests
     public class CalculatorTest
     {
         [Test]
-        public void Add_OneNumber_ReturnNumber()
+        public void Add_EmptyString_ReturnZero()
         {
-            //arrange
-            var numbers = "0";
-            //act 
-            var calc = new Calculator();
-            var result = calc.Add(numbers);
+            //arrange 
+            //act          
+            var calculator = new Calculator();
+            var result = calculator.Add("");
             //assert
-            Assert.That(result==0,"One number returned incorrectly");
+            Assert.That(0 == result, result.ToString());
         }
 
         [Test]
-        public void Add_TwoNumbers_ReturnNumber()
+        public void Add_OneNumber_ReturnsNumber()
         {
-            //arrange
-            var numbers = "1,2";
-            //act 
-            var calc = new Calculator();
-            var result = calc.Add(numbers);
+            //arrange 
+            //act
+            var calculator = new Calculator();
+            var result = calculator.Add("2");
             //assert
-            Assert.That(result == 3, "2 numbers summed returned incorrectly");
+            Assert.That(2 == result, result.ToString());
         }
 
         [Test]
-        public void Add_ThreeNumbers_ReturnNumber()
+        public void Add_TwoNumbers_ReturnsSumOfNumbers()
         {
-            //arrange
-            var numbers = "1,2,1";
-            //act 
-            var calc = new Calculator();
-            var result = calc.Add(numbers);
+            //arrange 
+            var numberString = "1,2";
+            //act
+            var calculator = new Calculator();
+            var result = calculator.Add(numberString);
             //assert
-            Assert.That(result == 4, "3 numbers summed returned incorrectly");
-        }
-        
-        [Test]
-        public void Add_EmpyString_Return_Zero()
-        {
-            //arrange
-            var numbers = "";
-            //act 
-            var calc = new Calculator();
-            var result = calc.Add(numbers);
-            //assert
-            Assert.That(result == 0, "Zero string returned incorrectly");
+            Assert.That(3 == result, result.ToString());
         }
 
         [Test]
-        public void Add_IntMaxAndOne_ExpectError()
+        public void Add_ManyNumbers_ReturnsSumOfNumbers()
         {
-            //arrange
-            var thrown = false;
-            var numbers = "2147483647,1";
-            //act 
-            var calc = new Calculator();
-            try
-            {
-                var result = calc.Add(numbers);
-            }
-            catch
-            {
-                thrown = true;
-            }
+            //arrange 
+            var numberString = "1,2,3";
+            //act
+            var calculator = new Calculator();
+            var result = calculator.Add(numberString);
             //assert
-            Assert.IsTrue(thrown, "Exception should be thrown");
+            Assert.That(6 == result, result.ToString());
         }
+        [Test]
+        public void Add_HandleNewLinesInInputWithManyNumbers_ReturnSumOfNumbers()
+        {
+            //arrange 
+            var numberString = "1\n2,3";
+            //act
+            var calculator = new Calculator();
+            var result = calculator.Add(numberString);
+            //assert
+            Assert.That(6 == result, result.ToString());
+
+        }
+
+
     }
 
 
