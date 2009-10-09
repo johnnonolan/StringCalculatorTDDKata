@@ -1,42 +1,73 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
+
 
 namespace CalculatorKata
 {
+
     public class Calculator
     {
-        private const char _delimiter = ',';
 
         public Calculator()
         {
+        }
+        
+        private char _Delimiter = ',';
+
+        private string ChangeDelimterAndRemoveCommand(string numberString)
+        {
+            var changeDelimiterCommand = @"//";
+            if (numberString.Contains(changeDelimiterCommand))
+            {
+                _Delimiter = numberString.Substring(3, 1).ToCharArray()[0];
+                numberString = numberString.Remove(0, 3);              
+            }
+            return numberString;
 
         }
-        public int Add(string numbers)
+        public int Add(string numberString)
         {
-            if (numbers.Contains(_delimiter))
+            if (String.IsNullOrEmpty(numberString))
+                return 0;
+            numberString = ChangeDelimterAndRemoveCommand(numberString);
+            
+            if (numberString.Contains(_Delimiter))
             {
-                var result = 0;
-                var numbersCollection = numbers.Split(_delimiter);
-                foreach (var number in numbersCollection)
-                {
-                    result += ParseNumber(number);
-                }
-                return result;
-            } 
+                return AddManyNumbers(numberString, _Delimiter);
+            }
+            return ExtractNumberFromString(numberString);
 
             return ParseNumber(numbers);
         }
 
-        private static int ParseNumber(string numbers)
+        private static int AddManyNumbers(string numberString, char delimiter)
         {
-            const int DEFAULTVALUE = 0;
-            int returnInt = 0;
-            Int32.TryParse(numbers, out returnInt);
 
+            numberString = ReplaceNewLinesWithDelimiter(numberString, delimiter);
+            var speraratedNumbers = numberString.Split(delimiter);
+            var total = 0;
+            foreach (var number in speraratedNumbers)
+            {
+                total += ExtractNumberFromString(number);
+	        }
+            return total;
+        }
 
-            return String.IsNullOrEmpty(numbers) ? DEFAULTVALUE : returnInt;
+        private static string ReplaceNewLinesWithDelimiter(string numberString, char delimiter)
+        {
+            numberString = numberString.Replace('\n', delimiter);
+            return numberString;
+        }
+
+        private static int ExtractNumberFromString(string numberString)
+        {
+            var resultInt = 0;
+            if (Int32.TryParse(numberString, out resultInt))
+                return resultInt;
+            throw new FormatException(numberString);
         }
     }
 }
