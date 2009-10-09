@@ -12,79 +12,59 @@ namespace CalculatorKata.Tests
         [Test]
         public void Add_EmptyString_ReturnZero()
         {
-            var numberString = "";
-
+            //arrange 
+            //act          
             var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-
-            Assert.AreEqual(0, result);
+            var result = calculator.Add("");
+            //assert
+            Assert.That(0 == result, result.ToString());
         }
 
         [Test]
-        public void Add_OneNumber_ReturnNumber()
+        public void Add_OneNumber_ReturnsNumber()
         {
-            var numberString = "1";
-
+            //arrange 
+            //act
             var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-
-            Assert.AreEqual(1, result);
+            var result = calculator.Add("2");
+            //assert
+            Assert.That(2 == result, result.ToString());
         }
 
         [Test]
-        public void Add_TwoNumber_ReturnSum()
+        public void Add_TwoNumbers_ReturnsSumOfNumbers()
         {
+            //arrange 
             var numberString = "1,2";
-
+            //act
             var calculator = new Calculator();
             var result = calculator.Add(numberString);
-
-            Assert.AreEqual(3, result);
+            //assert
+            Assert.That(3 == result, result.ToString());
         }
 
-
         [Test]
-        public void Add_UknownNumbers_ReturnSum()
+        public void Add_ManyNumbers_ReturnsSumOfNumbers()
         {
+            //arrange 
             var numberString = "1,2,3";
-
+            //act
             var calculator = new Calculator();
             var result = calculator.Add(numberString);
-
-            Assert.AreEqual(6, result);
+            //assert
+            Assert.That(6 == result, result.ToString());
         }
-
         [Test]
-        public void Add_NumbersWithNewLinesAndDelims_ReturnSum()
+        public void Add_HandleNewLinesInInputWithManyNumbers_ReturnSumOfNumbers()
         {
+            //arrange 
             var numberString = "1\n2,3";
-
+            //act
             var calculator = new Calculator();
             var result = calculator.Add(numberString);
+            //assert
+            Assert.That(6 == result, result.ToString());
 
-            Assert.AreEqual(6, result);
-        }
-
-        [Test]
-        [ExpectedException(typeof(System.FormatException))]
-        public void Add_NumbersWithNewLinesAndTrailingDelims_ThrowFormatException()
-        {
-            var numberString = "1,\n";
-
-            var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-
-            Assert.Fail();
-        }
-        [Test]
-        public void Add_NumbersWithDelimiterChange_ReturnsSum()
-        {
-            var numberString = "//|\n1|2";
-
-            var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-
-            Assert.AreEqual(3, result);
         }
 
 
