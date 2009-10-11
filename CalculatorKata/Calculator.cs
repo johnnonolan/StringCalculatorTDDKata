@@ -2,69 +2,61 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Diagnostics;
 
 
 namespace CalculatorKata
 {
-
     public class Calculator
     {
-        public Calculator()
-        {
-        }
-        
+        private const string DELIMITERCOMMAND = "//";
         private char _Delimiter = ',';
-
-        private string ChangeDelimterAndRemoveCommand(string numberString)
-        {
-            var changeDelimiterCommand = @"//";
-            if (numberString.Contains(changeDelimiterCommand))
-            {
-                _Delimiter = numberString.Substring(3, 1).ToCharArray()[0];
-                numberString = numberString.Remove(0, 3);              
-            }
-            return numberString;
-
-        }
         public int Add(string numberString)
         {
-            if (String.IsNullOrEmpty(numberString))
+            numberString = ChangeDelimiterAndRemoveCommand(numberString);         
+            numberString= SanitiseInput(numberString);
+            if (numberString == String.Empty)
+            {
                 return 0;
-            numberString = ChangeDelimterAndRemoveCommand(numberString);
-            
+            }
             if (numberString.Contains(_Delimiter))
             {
-                return AddManyNumbers(numberString, _Delimiter);
+                return HandleDelimitedString(numberString, _Delimiter);
             }
-            return ExtractNumberFromString(numberString);
+            return HandleSingleNumberString(numberString);
         }
 
-        private static int AddManyNumbers(string numberString, char delimiter)
+        private string ChangeDelimiterAndRemoveCommand(string numberString)
         {
-
-            numberString = ReplaceNewLinesWithDelimiter(numberString, delimiter);
-            var speraratedNumbers = numberString.Split(delimiter);
-            var total = 0;
-            foreach (var number in speraratedNumbers)
+            if (numberString.StartsWith(DELIMITERCOMMAND))
             {
-                total += ExtractNumberFromString(number);
-	        }
+                _Delimiter = numberString[2];
+                return numberString.Substring(4);
+            }
+            return numberString;
+        }
+        private string SanitiseInput(string numberString)
+        {
+            return numberString.Replace("\n", _Delimiter.ToString());
+        }
+        private static int HandleDelimitedString(string numberString, char delimiter)
+        {
+            var total = 0;
+            foreach (var item in numberString.Split(delimiter))
+            {
+                total += HandleSingleNumberString(item);
+            }
             return total;
         }
 
-        private static string ReplaceNewLinesWithDelimiter(string numberString, char delimiter)
+        private static int HandleSingleNumberString(string numberString)
         {
-            numberString = numberString.Replace('\n', delimiter);
-            return numberString;
-        }
+            int result;
+            if (int.TryParse(numberString, out result))
+            {
+                return result;
+            }
 
-        private static int ExtractNumberFromString(string numberString)
-        {
-            var resultInt = 0;
-            if (Int32.TryParse(numberString, out resultInt))
-                return resultInt;
-            throw new FormatException(numberString);
+            throw new FormatException(String.Format("Error processing single number for {0}",numberString));
         }
     }
 }

@@ -14,10 +14,10 @@ namespace CalculatorKata.Tests
         {
             var numberString = "";
 
-            var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-
+            var calc = new Calculator();
+            var result =calc.Add(numberString);
             Assert.AreEqual(0, result);
+
         }
 
         [Test]
@@ -25,67 +25,80 @@ namespace CalculatorKata.Tests
         {
             var numberString = "1";
 
-            var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-
+            var calc = new Calculator();
+            var result =calc.Add(numberString);
             Assert.AreEqual(1, result);
+
         }
 
         [Test]
-        public void Add_TwoNumber_ReturnSum()
+        public void Add_TwoNumbers_ReturnSumOfNumbers()
         {
             var numberString = "1,2";
 
-            var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-
+            var calc = new Calculator();
+            var result = calc.Add(numberString);
             Assert.AreEqual(3, result);
-       }
 
+        }
 
         [Test]
-        public void Add_UknownNumbers_ReturnSum()
+        public void Add_ThreeNumbers_ReturnSumOfNumbers()
         {
             var numberString = "1,2,3";
 
-            var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-
+            var calc = new Calculator();
+            var result = calc.Add(numberString);
             Assert.AreEqual(6, result);
+
         }
 
         [Test]
-        public void Add_NumbersWithNewLinesAndDelims_ReturnSum()
+        public void Add_FourNumbers_ReturnSumOfNumbers()
         {
-            var numberString = "1\n2,3";
+            var numberString = "1,1,1,1";
 
-            var calculator = new Calculator();
-            var result = calculator.Add(numberString);
+            var calc = new Calculator();
+            var result = calc.Add(numberString);
+            Assert.AreEqual(4, result);
 
-            Assert.AreEqual(6, result);
         }
 
         [Test]
-        [ExpectedException(typeof(System.FormatException))]
-        public void Add_NumbersWithNewLinesAndTrailingDelims_ThrowFormatException()
+        public void Add_NumbersWithNewLineActingAsADelimieter_ReturnSumOfNumbers()
+        {
+            var numberString = "1\n2";
+
+            var calc = new Calculator();
+            var result = calc.Add(numberString);
+            Assert.AreEqual(3, result);
+
+        }
+
+
+        [Test]
+        [ExpectedException(typeof(FormatException))]
+        public void Add_NumbersWithNewLineActingAsADelimieterAtEnd_ThrowsFormatExeption()
         {
             var numberString = "1,\n";
 
-            var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-
+            var calc = new Calculator();
+            var result = calc.Add(numberString);
             Assert.Fail();
+
         }
+
         [Test]
-        public void Add_NumbersWithDelimiterChange_ReturnsSum()
+        public void Add_NumbersWithChangeDelimieter_ReturnSumOfNumbers()
         {
             var numberString = "//|\n1|2";
 
-            var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-
+            var calc = new Calculator();
+            var result = calc.Add(numberString);
             Assert.AreEqual(3, result);
+
         }
+
 
 
     }
