@@ -8,55 +8,73 @@ namespace CalculatorKata
 {
     public class Calculator
     {
-        private const string DELIMITERCOMMAND = "//";
         private char _Delimiter = ',';
+        
+        public Calculator()
+        {
+        }
+        private void ChangeDelimeter(string numberString)
+        {
+
+            const int POSAFTERDELIMITER = 2;
+            _Delimiter = numberString[POSAFTERDELIMITER] ;
+        }
         public int Add(string numberString)
         {
-            numberString = ChangeDelimiterAndRemoveCommand(numberString);         
-            numberString= SanitiseInput(numberString);
-            if (numberString == String.Empty)
+            if (String.IsNullOrEmpty(numberString))
+                return HandleEmptyString();
+            if (HasChangeDelimiterCommand(numberString))
             {
-                return 0;
+                ChangeDelimeter(numberString);
+                numberString = StripDelimiterCommand(numberString);
             }
+            if (HasNewLines(numberString))
+                numberString = StripNewLines(numberString);
+
             if (numberString.Contains(_Delimiter))
             {
-                return HandleDelimitedString(numberString, _Delimiter);
+                return HandlesMultipleNumbers(numberString);
             }
-            return HandleSingleNumberString(numberString);
+            return HandleSingleNumber(numberString);
         }
 
-        private string ChangeDelimiterAndRemoveCommand(string numberString)
+        private string StripDelimiterCommand(string numberString)
         {
-            if (numberString.StartsWith(DELIMITERCOMMAND))
-            {
-                _Delimiter = numberString[2];
-                return numberString.Substring(4);
-            }
-            return numberString;
+            return numberString.Remove(0,numberString.IndexOf('\n')+1);
+
         }
-        private string SanitiseInput(string numberString)
+        private bool HasChangeDelimiterCommand(string numberString)
         {
-            return numberString.Replace("\n", _Delimiter.ToString());
+            return numberString.StartsWith("//");
         }
-        private static int HandleDelimitedString(string numberString, char delimiter)
+        private string StripNewLines(string numberString)
+        {
+            return numberString.Replace('\n', _Delimiter);
+        }
+        private bool HasNewLines(string numberString)
+        {
+            return numberString.Contains('\n');
+        }
+        private int HandlesMultipleNumbers(string numberString)
         {
             var total = 0;
-            foreach (var item in numberString.Split(delimiter))
+            var numbersinString = numberString.Split(_Delimiter);
+
+            foreach (var item in numbersinString)
             {
-                total += HandleSingleNumberString(item);
+                total += HandleSingleNumber(item);
             }
             return total;
         }
 
-        private static int HandleSingleNumberString(string numberString)
+        private static int HandleSingleNumber(string numberString)
         {
-            int result;
-            if (int.TryParse(numberString, out result))
-            {
-                return result;
-            }
+            return int.Parse(numberString);
+        }
 
-            throw new FormatException(String.Format("Error processing single number for {0}",numberString));
+        private static int HandleEmptyString()
+        {
+            return 0;
         }
     }
 }
