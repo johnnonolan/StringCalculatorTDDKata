@@ -6,88 +6,6 @@ using NUnit.Framework;
 
 namespace CalculatorKata.Tests
 {
-    public class Calculator
-    {
-        private  char _Delimiter = ',';
-        public Calculator()
-        {
-            
-        }
-        public int Add(string numberString)
-        {
-
-            if (isEmptyString(numberString))
-            {
-                return HandleEmptyString();
-            }
-
-            if (numberString.StartsWith("//"))
-                numberString = ChangeDelimiter(numberString);
-            numberString = StripNewLines(numberString);
-
-            return ParseNumberString(numberString);
-        }
-
-        private string ChangeDelimiter(string numberString)
-        {
-            _Delimiter = ';';
-            numberString = numberString.Substring(numberString.IndexOf('\n')+1,numberString.Length-(numberString.IndexOf('\n')+1));
-            return numberString;
-        }
-        private int ParseNumberString(string numberString)
-        {
-            return HandleMulitpleNumbers(numberString);
-        }
-
-        private int HandleMulitpleNumbers(string numberString)
-        {
-            var numbers = numberString.Split(_Delimiter);
-            var total = 0;
-            foreach (var number in numbers)
-            {
-                total +=  HandleSingleNumber(number);
-            }
-            return total;
-        }
-
-        private string StripNewLines(string numberString)
-        {
-            return numberString.Replace('\n', _Delimiter);
-        }
-        private bool hasDelimiter(string numberString)
-        {
-            return numberString.Contains(_Delimiter);
-        }
-
-        private static int HandleSingleNumber(string numberString)
-        {
-            try
-            {
-                int result;
-                if (Int32.TryParse(numberString,out result))                    
-                {
-                    return result;
-                }
-                return result;
-            }
-            catch (Exception)
-            {
-
-                throw new FormatException("Negatives not allowed");
-            }
-
-        }
-
-        private static bool isEmptyString(string numberString)
-        {
-            return String.IsNullOrEmpty(numberString);
-        }
-
-        private static int HandleEmptyString()
-        {
-            return 0;
-        }
-    }
     [TestFixture]
     public class CalculatorTests
     {
@@ -138,12 +56,12 @@ namespace CalculatorKata.Tests
 
         [Test]
         [ExpectedException(typeof(FormatException))]
-        public void Add_NumbersAndHandleInValidNewLine_ThrowsInvlaidException()
+        public void Add_NumbersAndHandleInvalidNewLine_ThrowsInvalidException()
         {
             var numberString = "1,\n";
             var calculator = new Calculator();
             calculator.Add(numberString);
-           Assert.Fail();
+            Assert.Fail();
         }
 
         [Test]
@@ -157,11 +75,9 @@ namespace CalculatorKata.Tests
 
         [Test]
         public void Add_NegativeNumber_ThrowFormatExceptiomWithNegativesNotAllowed()
-        {
-
-
-         //var ex=   Assert.Throws<FormatException>(() => {throw new FormatException(); });
-            var ex = Assert.Throws(Is.InstanceOf<FormatException>,
+        {        
+            Assert.Throws(Is.InstanceOf<FormatException>()
+                          .And.Message.EqualTo("Negatives not allowed"),
                                    () => { throw new FormatException("Negatives not allowed"); });
         }
 
