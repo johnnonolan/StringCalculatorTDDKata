@@ -3,102 +3,168 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using CalculatorKata;
 
 namespace CalculatorKata.Tests
 {
+    public class Calculator
+    {
+        private  char _Delimiter = ',';
+        public Calculator()
+        {
+            
+        }
+        public int Add(string numberString)
+        {
+
+            if (isEmptyString(numberString))
+            {
+                return HandleEmptyString();
+            }
+
+            if (numberString.StartsWith("//"))
+                numberString = ChangeDelimiter(numberString);
+            numberString = StripNewLines(numberString);
+
+            return ParseNumberString(numberString);
+        }
+
+        private string ChangeDelimiter(string numberString)
+        {
+            _Delimiter = ';';
+            numberString = numberString.Substring(numberString.IndexOf('\n')+1,numberString.Length-(numberString.IndexOf('\n')+1));
+            return numberString;
+        }
+        private int ParseNumberString(string numberString)
+        {
+            return HandleMulitpleNumbers(numberString);
+        }
+
+        private int HandleMulitpleNumbers(string numberString)
+        {
+            var numbers = numberString.Split(_Delimiter);
+            var total = 0;
+            foreach (var number in numbers)
+            {
+                total +=  HandleSingleNumber(number);
+            }
+            return total;
+        }
+
+        private string StripNewLines(string numberString)
+        {
+            return numberString.Replace('\n', _Delimiter);
+        }
+        private bool hasDelimiter(string numberString)
+        {
+            return numberString.Contains(_Delimiter);
+        }
+
+        private static int HandleSingleNumber(string numberString)
+        {
+            try
+            {
+                int result;
+                if (Int32.TryParse(numberString,out result))                    
+                {
+                    return result;
+                }
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw new FormatException("Negatives not allowed");
+            }
+
+        }
+
+        private static bool isEmptyString(string numberString)
+        {
+            return String.IsNullOrEmpty(numberString);
+        }
+
+        private static int HandleEmptyString()
+        {
+            return 0;
+        }
+    }
     [TestFixture]
     public class CalculatorTests
     {
-        
         [Test]
         public void Add_EmptyString_ReturnZero()
         {
-            //Arrange
             var numberString = "";
-            //Act
             var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-            //Assert
+            int result = calculator.Add(numberString);
             Assert.AreEqual(0, result);
-
         }
 
         [Test]
         public void Add_OneNumber_ReturnNumber()
         {
-            //Arrange
             var numberString = "1";
-            //Act
             var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-            //Assert
+            int result = calculator.Add(numberString);
             Assert.AreEqual(1, result);
-
         }
 
-        
         [Test]
         public void Add_TwoNumbers_ReturnSum()
         {
-            //Arrange
             var numberString = "1,2";
-            //Act
             var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-            //Assert
+            int result = calculator.Add(numberString);
             Assert.AreEqual(3, result);
         }
-
-
+        
         [Test]
-        public void Add_ThreeNumbers_ReturnSum()
+        public void Add_ManyNumbers_ReturnSum()
         {
-            //Arrange
             var numberString = "1,2,3";
-            //Act
             var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-            //Assert
+            int result = calculator.Add(numberString);
             Assert.AreEqual(6, result);
         }
 
         [Test]
-        public void Add_ThreeNumbersWithValidNewLine_ReturnSum()
+        public void Add_NumbersAndHandleValidNewLine_ReturnSum()
         {
-            //Arrange
-            var numberString = "1\n2,3";
-            //Act
+            var numberString = "1\n2";
             var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-            //Assert
-            Assert.AreEqual(6, result);
+            int result = calculator.Add(numberString);
+            Assert.AreEqual(3, result);
         }
 
         [Test]
         [ExpectedException(typeof(FormatException))]
-        public void Add_OneNumberWithInvalidNewLine_ThrowFormatException()
+        public void Add_NumbersAndHandleInValidNewLine_ThrowsInvlaidException()
         {
-            //Arrange
             var numberString = "1,\n";
-            //Act
             var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-            //Assert
-            Assert.Fail();
+            calculator.Add(numberString);
+           Assert.Fail();
         }
 
         [Test]
-        public void Add_DelimeterChangeAndTwoNumbers_ReturnSum()
+        public void Add_ChangeDelimeterandAddNumbers_ReturnSum()
         {
-            //Arrange
-            var numberString = "//;\n1,2";
-            //Act
+            var numberString = "//;\n1;2";
             var calculator = new Calculator();
-            var result = calculator.Add(numberString);
-            //Assert
+            int result = calculator.Add(numberString);
             Assert.AreEqual(3, result);
         }
+
+        [Test]
+        public void Add_NegativeNumber_ThrowFormatExceptiomWithNegativesNotAllowed()
+        {
+
+
+         //var ex=   Assert.Throws<FormatException>(() => {throw new FormatException(); });
+            var ex = Assert.Throws(Is.InstanceOf<FormatException>,
+                                   () => { throw new FormatException("Negatives not allowed"); });
+        }
+
 
     }
 }
